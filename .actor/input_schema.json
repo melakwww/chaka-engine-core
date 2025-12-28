@@ -7,12 +7,14 @@
             "title": "Starting Cycles",
             "type": "integer",
             "description": "Initial cycle count",
+            "editor": "number",
             "default": 469244
         },
         "target_valuation": {
             "title": "Revenue Goal",
             "type": "string",
             "description": "Target valuation (e.g., $10,000)",
+            "editor": "textfield",
             "default": "$10,000"
         }
     }
