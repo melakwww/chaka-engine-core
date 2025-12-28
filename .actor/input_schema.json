@@ -13,12 +13,14 @@
         "start_cycles": {
             "title": "Starting Cycles",
             "type": "integer",
+            "description": "The initial number of cycles to start the engine from.",
             "editor": "number",
             "default": 469244
         },
         "target_valuation": {
             "title": "Revenue Goal",
             "type": "string",
+            "description": "The target valuation to be displayed (e.g., $10,000).",
             "editor": "textfield",
             "default": "$10,000"
         }
