@@ -1,0 +1,11 @@
+{
+    "actorSpecification": 1,
+    "name": "chaka-high-velocity-engine",
+    "title": "Chaka Engine: Real-Time Market Monitor",
+    "description": "High-velocity data verification engine with 1.1ms peak efficiency and 469k+ verified cycles.",
+    "version": "1.0",
+    "buildTag": "latest",
+    "dockerfile": "./Dockerfile",
+    "readme": "./README.md",
+    "input": "./.actor/input_schema.json"
+}

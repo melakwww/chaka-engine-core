@@ -1,0 +1,10 @@
+# Security Keys (NEVER UPLOAD THESE)
+serviceAccountKey.json
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Logs
+logs/
+*.log
