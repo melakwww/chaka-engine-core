@@ -26,6 +26,7 @@ async def main():
         try:
             # 3. Initialize Firebase using the JSON object directly
             if not firebase_admin._apps:
+                # credentials.Certificate can accept a dict directly
                 cred = credentials.Certificate(firebase_key_json)
                 firebase_admin.initialize_app(cred, {'databaseURL': DATABASE_URL})
             
