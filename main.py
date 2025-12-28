@@ -9,61 +9,40 @@ import time
 DATABASE_URL = 'https://dj-chaka-website-default-rtdb.europe-west1.firebasedatabase.app/'
 
 async def main():
-    """Main execution loop for the Chaka Engine on Apify Cloud."""
     async with Actor:
-        # 1. Fetch all inputs from the Apify UI
-        # This replaces the need for a physical .json file
+        # 1. Fetch the JSON key from the Apify Input tab
         actor_input = await Actor.get_input() or {}
-        
-        # Get the JSON data from the field named "firebase_key"
         firebase_key_dict = actor_input.get("firebase_key")
-        target_valuation = actor_input.get("target_valuation", "$10,000")
-        start_cycles = actor_input.get("start_cycles", 94208)
-
-        # 2. Safety Check: If the key isn't in the Input tab, the Actor explains why
+        
+        # 2. Stop if the key wasn't pasted in the UI
         if not firebase_key_dict:
-            Actor.log.error("CRITICAL: 'firebase_key' is missing in the Input tab!")
-            Actor.log.error("Please ensure you have pasted your JSON credentials into that field.")
+            Actor.log.error("CRITICAL: 'firebase_key' missing in Input tab! Paste your JSON there.")
             return
 
         try:
-            # 3. Initialize Firebase using the JSON dictionary directly
+            # 3. Initialize Firebase using the Dictionary (No file needed!)
             if not firebase_admin._apps:
-                # credentials.Certificate accepts a DICT directly instead of a file path
                 cred = credentials.Certificate(firebase_key_dict)
-                firebase_admin.initialize_app(cred, {
-                    'databaseURL': DATABASE_URL
-                })
+                firebase_admin.initialize_app(cred, {'databaseURL': DATABASE_URL})
             
             ref = db.reference('/')
-            current_cycles = start_cycles
+            current_cycles = actor_input.get("start_cycles", 94208)
 
             Actor.log.info("--- CHAKA ENGINE: CONVERGENCE TRIGGERED ---")
 
             while True:
-                # 4. Logic Loop (Tesla 369 Vortex Pattern)
                 current_cycles += random.randint(100, 369)
                 new_sig = "%016x" % random.getrandbits(64)
 
-                # Sync to Firebase
+                # 4. Syncing to Firebase
                 ref.update({
-                    "broadcast": "Afronet Online: Mission Completed",
-                    "current_valuation": target_valuation,
-                    "logic_mode": "TESLA_369_VORTEX",
-                    "overall_status": "VORTEX_LOCKED",
-                    "security_signature": new_sig,
                     "total_cycles_verified": current_cycles,
+                    "security_signature": new_sig,
+                    "overall_status": "CHAKA_LOCKED",
                     "last_sync": time.strftime("%H:%M:%S")
                 })
 
-                # Log and push results to Apify Dataset
-                await Actor.push_data({"cycle": current_cycles, "signature": new_sig})
                 Actor.log.info(f"VORTEX UPDATE: {current_cycles} Cycles | Status: LOCKED")
-                
-                if current_cycles >= 100000:
-                    Actor.log.info("--- MISSION SUCCESS: 100K CYCLES VERIFIED ---")
-
-                # Maintain 1-second pulse
                 await asyncio.sleep(1)
 
         except Exception as e:
