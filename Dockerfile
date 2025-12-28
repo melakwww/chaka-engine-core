@@ -1,12 +1,12 @@
-# Using the official Apify Python base image
+# Use the official Apify Python base image
 FROM apify/actor-python:3.11
 
-# Copy requirements and install dependencies
-COPY requirements.txt ./
+# Install dependencies with correct permissions
+COPY --chown=myuser:myuser requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the engine code
-COPY . ./
+# Copy all source code
+COPY --chown=myuser:myuser . ./
 
-# Run the engine
-CMD ["python3", "main.py"]
+# Explicitly start the Python engine
+CMD ["python3", "-m", "src.main"]
