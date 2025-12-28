@@ -2,6 +2,6 @@
     "actorSpecification": 1,
     "name": "chaka-engine-core",
     "version": "0.1",
-    "dockerfile": "./Dockerfile",
-    "input": "./.actor/input_schema.json"
+    "dockerfile": "../Dockerfile",
+    "input": "./input_schema.json"
 }
