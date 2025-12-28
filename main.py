@@ -9,34 +9,37 @@ import os
 # --- CONFIGURATION ---
 # Use the Realtime Database URL for data operations
 DATABASE_URL = 'https://dj-chaka-website-default-rtdb.europe-west1.firebasedatabase.app/'
-SERVICE_ACCOUNT_PATH = "./serviceAccountKey.json"
 
 async def main():
     """Main execution loop for the Chaka Engine on Apify Cloud."""
     async with Actor:
         # 1. Initialize Actor Input
-        # This allows users to configure the engine from the Apify UI
+        # Pulls values directly from the Apify UI
         actor_input = await Actor.get_input() or {}
         target_valuation = actor_input.get("target_valuation", "$10,000")
         start_cycles = actor_input.get("start_cycles", 469244)
+        
+        # Pull the JSON key you pasted into the "firebase_key" input field
+        firebase_key_json = actor_input.get("firebase_key")
 
-        # 2. Establish Firebase Connection
-        if not os.path.exists(SERVICE_ACCOUNT_PATH):
-            Actor.log.error(f"CRITICAL: {SERVICE_ACCOUNT_PATH} not found.")
+        # 2. Establish Firebase Connection using Input Data
+        if not firebase_key_json:
+            Actor.log.error("CRITICAL: Firebase key missing in Input tab. Please paste your serviceAccountKey JSON.")
             return
 
-        if not firebase_admin._apps:
-            cred = credentials.Certificate(SERVICE_ACCOUNT_PATH)
-            firebase_admin.initialize_app(cred, {
-                'databaseURL': DATABASE_URL
-            })
-        
-        ref = db.reference('/')
-        current_cycles = start_cycles
-
-        Actor.log.info("--- CHAKA ENGINE: CONVERGENCE TRIGGERED ---")
-
         try:
+            if not firebase_admin._apps:
+                # Initialize using the dictionary directly instead of a file
+                cred = credentials.Certificate(firebase_key_json)
+                firebase_admin.initialize_app(cred, {
+                    'databaseURL': DATABASE_URL
+                })
+            
+            ref = db.reference('/')
+            current_cycles = start_cycles
+
+            Actor.log.info("--- CHAKA ENGINE: CONVERGENCE TRIGGERED ---")
+
             while True:
                 # 3. High-Frequency Cycle Logic (Tesla 369 Vortex Pattern)
                 current_cycles += random.randint(100, 369)
