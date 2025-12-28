@@ -6,21 +6,21 @@
         "firebase_key": {
             "title": "Firebase Service Account JSON",
             "type": "object",
-            "description": "Paste the contents of your serviceAccountKey.json file here",
+            "description": "Paste the contents of your key.json file here",
             "editor": "json",
             "isSecret": true
         },
         "start_cycles": {
             "title": "Starting Cycles",
             "type": "integer",
-            "description": "The initial number of cycles to start the engine from.",
+            "description": "The initial cycle count to verify",
             "editor": "number",
             "default": 469244
         },
         "target_valuation": {
             "title": "Revenue Goal",
             "type": "string",
-            "description": "The target valuation to be displayed (e.g., $10,000).",
+            "description": "Target valuation for the dashboard",
             "editor": "textfield",
             "default": "$10,000"
         }
